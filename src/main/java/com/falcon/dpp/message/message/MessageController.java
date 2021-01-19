@@ -30,7 +30,7 @@ public class MessageController {
     private SimpMessagingTemplate template;
 
     @GetMapping("/publish/{message}")
-    public ResponseEntity<String> post(@PathVariable("message") final String message) {
+    public ResponseEntity<String> publishMessage(@PathVariable("message") final String message) {
 
         LOGGER.info("Starting pusblish message endpoint...");
 

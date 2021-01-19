@@ -13,10 +13,6 @@ public class Message {
 
     private String message;
 
-    public Message(){
-
-    }
-
     public Message(String message){
         setId(UUID.randomUUID().toString());
         setMessage(message);

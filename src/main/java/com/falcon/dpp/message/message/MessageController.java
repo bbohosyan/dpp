@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/messages")
 public class MessageController {
 
-    private static final String TOPIC = "message";
+    private static final String TOPIC = "messages";
 
     private final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 

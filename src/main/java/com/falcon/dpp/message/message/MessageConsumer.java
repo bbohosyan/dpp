@@ -15,7 +15,7 @@ public class MessageConsumer {
     @Autowired
     private MessageRepository messageRepository;
 
-    @KafkaListener(topics = "message", groupId = "group")
+    @KafkaListener(topics = "messages", groupId = "group")
     public void receive(String message)  {
         LOGGER.info("received message {} ", message);
 

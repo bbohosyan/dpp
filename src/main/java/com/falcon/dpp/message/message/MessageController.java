@@ -1,56 +1,67 @@
 package com.falcon.dpp.message.message;
 
-import com.falcon.dpp.message.message.model.Message;
+import com.falcon.dpp.message.message.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
 
-    private static final String TOPIC = "messages";
-
     private final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
-    @Autowired
-    private MessageRepository messageRepository;
+    private final MessageService messageService;
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-
-    @Autowired
-    private SimpMessagingTemplate template;
-
-    @GetMapping("/publish/{message}")
-    public ResponseEntity<String> publishMessage(@PathVariable("message") final String message) {
-
-        LOGGER.info("Starting pusblish message endpoint...");
-
-        kafkaTemplate.send(TOPIC, message);
-
-        this.template.convertAndSend("/topic/messages", message);
-        LOGGER.info(message);
-
-        LOGGER.info("Publish message endpoint ended successfully");
-        return ResponseEntity.ok(message);
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
     }
 
+    /**
+     * Handler is logging and returning 400 status code
+     * when JSON is not valid and 400 Bad Request
+     */
+    @ExceptionHandler({HttpMessageNotReadableException.class})
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    public void handleException() {
+        System.out.println("Message is not valid JSON");
+    }
+
+    /**
+     * Endpoint for sending the message to kafka
+     * @param message - every valid JSON
+     * @return
+     */
+    @GetMapping("/publish")
+    public ResponseEntity<Object> publishMessage(@RequestBody final Object message) {
+            LOGGER.info("Starting pusblish message endpoint...");
+
+            messageService.publishMessage(message.toString());
+
+            LOGGER.info("Publishing message endpoint ended successfully");
+            return ResponseEntity.ok(message);
+    }
+
+
+    /**
+     * Endpoint for retrieving all message persisted in the MongoDB
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<String>> getAllMessages(){
 
-        LOGGER.info("Starting pusblish message endpoint...");
+        LOGGER.info("Starting publish message endpoint...");
 
-        List<String> getAllMessages = messageRepository.findAll().stream()
-                .map(Message::getMessage).collect(Collectors.toList());
+        List<String> getAllMessages = messageService.getAllMessages();
 
+        LOGGER.info("Publishing message endpoint ended successfully");
         return ResponseEntity.ok(getAllMessages);
 
     }

@@ -32,7 +32,7 @@ services:
   db:
     image: mongo
     environment:
-      - MONGO_INITDB_DATABASE=message
+      - MONGO_INITDB_DATABASE=dpp
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
     ports:

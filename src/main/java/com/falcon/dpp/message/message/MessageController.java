@@ -25,7 +25,8 @@ public class MessageController {
     }
 
     /**
-     * Handler when JSON is not valid and 400 Bad Request
+     * Handler is logging and returning 400 status code
+     * when JSON is not valid and 400 Bad Request
      */
     @ExceptionHandler({HttpMessageNotReadableException.class})
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
@@ -34,8 +35,8 @@ public class MessageController {
     }
 
     /**
-     * Message is every valid JSON
-     * @param message
+     * Endpoint for sending the message to kafka
+     * @param message - every valid JSON
      * @return
      */
     @GetMapping("/publish")
@@ -48,6 +49,11 @@ public class MessageController {
             return ResponseEntity.ok(message);
     }
 
+
+    /**
+     * Endpoint for retrieving all message persisted in the MongoDB
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<String>> getAllMessages(){
 

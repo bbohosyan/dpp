@@ -1,45 +1,33 @@
 package com.falcon.dpp.message.message;
 
-import com.falcon.dpp.message.message.model.Message;
+import com.falcon.dpp.message.message.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
 
-    private static final String TOPIC = "messages";
-
     private final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
-    @Autowired
-    private MessageRepository messageRepository;
+    private final MessageService messageService;
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-
-    @Autowired
-    private SimpMessagingTemplate template;
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @GetMapping("/publish/{message}")
     public ResponseEntity<String> publishMessage(@PathVariable("message") final String message) {
 
         LOGGER.info("Starting pusblish message endpoint...");
 
-        kafkaTemplate.send(TOPIC, message);
+        messageService.publishMessage(message);
 
-        this.template.convertAndSend("/topic/messages", message);
-        LOGGER.info(message);
-
-        LOGGER.info("Publish message endpoint ended successfully");
+        LOGGER.info("Publishing message endpoint ended successfully");
         return ResponseEntity.ok(message);
     }
 
@@ -48,9 +36,9 @@ public class MessageController {
 
         LOGGER.info("Starting pusblish message endpoint...");
 
-        List<String> getAllMessages = messageRepository.findAll().stream()
-                .map(Message::getMessage).collect(Collectors.toList());
+        List<String> getAllMessages = messageService.getAllMessages();
 
+        LOGGER.info("Pusblishing message endpoint ended successfully");
         return ResponseEntity.ok(getAllMessages);
 
     }

@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -22,15 +24,19 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    @ExceptionHandler({HttpMessageNotReadableException.class})
+    public void handleException() {
+        System.out.println("Message is not valid JSON");
+    }
+
     @GetMapping("/publish")
     public ResponseEntity<Object> publishMessage(@RequestBody final Object message) {
+            LOGGER.info("Starting pusblish message endpoint...");
 
-        LOGGER.info("Starting pusblish message endpoint...");
+            messageService.publishMessage(message.toString());
 
-        messageService.publishMessage(message.toString());
-
-        LOGGER.info("Publishing message endpoint ended successfully");
-        return ResponseEntity.ok(message);
+            LOGGER.info("Publishing message endpoint ended successfully");
+            return ResponseEntity.ok(message);
     }
 
     @GetMapping

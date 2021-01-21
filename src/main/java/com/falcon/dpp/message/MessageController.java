@@ -1,6 +1,6 @@
-package com.falcon.dpp.message.message;
+package com.falcon.dpp.message;
 
-import com.falcon.dpp.message.message.service.MessageService;
+import com.falcon.dpp.message.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class MessageController {
     @ExceptionHandler({HttpMessageNotReadableException.class})
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
     public void handleException() {
-        System.out.println("Message is not valid JSON");
+        LOGGER.info("Message is not valid JSON");
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.falcon.dpp.message.message.model;
+package com.falcon.dpp.message.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,10 +20,6 @@ public class Message {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public void setMessage(String message) {

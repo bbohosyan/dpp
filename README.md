@@ -2,7 +2,7 @@
 
 # Falcon.io
 
-Technology stack : Kafka, Postgresql, WebSocket, Stomp.js
+Technology stack : Kafka, MongoDB, Docker, Kafka
 
 # Installations
 Before you can build this project, you must install and configure the following dependencies on your machine:

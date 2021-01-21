@@ -1,4 +1,4 @@
-package com.falcon.dpp.message;
+package com.falcon.dpp.message.repository;
 
 import com.falcon.dpp.message.model.Message;
 import org.springframework.data.mongodb.repository.MongoRepository;

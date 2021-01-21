@@ -3,8 +3,9 @@ package com.falcon.dpp.message;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import com.falcon.dpp.message.controller.MessageController;
 import com.falcon.dpp.message.model.Message;
-import com.falcon.dpp.message.service.MessageService;
+import com.falcon.dpp.message.repository.MessageRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -38,9 +39,6 @@ public class MessageControllerTest {
     private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @Autowired
-    private MessageService messageService;
-
-    @Autowired
     private MessageRepository messageRepository;
 
     @Autowired
@@ -49,18 +47,26 @@ public class MessageControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private ObjectWriter objectWriter;
+
+    private ListAppender<ILoggingEvent> listAppender;
+
     @BeforeEach
     public void setUp(){
         messageRepository.deleteAll();
+        
+        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+
+        Logger logger = (Logger) LoggerFactory.getLogger(MessageController.class);
+        listAppender = new ListAppender<>();
+        listAppender.start();
+        logger.addAppender(listAppender);
     }
 
     @Test
     public void publishMessage_validRequest_returnsOK() throws Exception {
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString("{'message':'testmessage'}");
+        String requestJson=objectWriter.writeValueAsString("{'message':'testmessage'}");
         this.mockMvc.perform(get("/messages/publish")
                 .contentType(APPLICATION_JSON_VALUE)
                             .content(requestJson))
@@ -70,11 +76,6 @@ public class MessageControllerTest {
     @Test
     public void publishMessage_invalidMessageJSON_returnsBadRequest() throws Exception {
 
-        Logger logger = (Logger) LoggerFactory.getLogger(MessageController.class);
-        ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
-        listAppender.start();
-        logger.addAppender(listAppender);
-
         this.mockMvc.perform(get("/messages/publish")
                 .contentType(APPLICATION_JSON)
                 .content("'message':'test message'}}}}}"))
@@ -82,6 +83,21 @@ public class MessageControllerTest {
 
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals("Message is not valid JSON", logsList.get(0)
+                .getMessage());
+    }
+
+    @Test
+    public void publishMessage_emptyMessageJSON_returnsBadRequest() throws Exception {
+
+        String requestJson=objectWriter.writeValueAsString("{}");
+
+        this.mockMvc.perform(get("/messages/publish")
+                .contentType(APPLICATION_JSON)
+                .content(requestJson))
+                .andDo(print()).andExpect(status().isNoContent());
+
+        List<ILoggingEvent> logsList = listAppender.list;
+        assertEquals("Message is empty JSON", logsList.get(1)
                 .getMessage());
     }
 

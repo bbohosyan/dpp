@@ -1,25 +1,15 @@
 package com.falcon.dpp.message.model;
 
-import org.springframework.data.annotation.Id;
+import com.falcon.dpp.message.model.base.Model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.UUID;
-
 @Document(collection = "messages")
-public class Message {
-
-    @Id
-    private String id;
+public class Message extends Model {
 
     private String message;
 
     public Message(String message){
-        setId(UUID.randomUUID().toString());
         setMessage(message);
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setMessage(String message) {

@@ -8,8 +8,11 @@ Technology stack : Kafka, Postgresql, WebSocket, Stomp.js
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 Docker
+
 Java 11
+
 MongoDB
+
 Kafka 2.12
 
 # Run

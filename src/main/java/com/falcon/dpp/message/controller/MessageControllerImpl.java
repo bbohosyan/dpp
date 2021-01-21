@@ -4,9 +4,7 @@ import com.falcon.dpp.message.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,16 +23,6 @@ public class MessageControllerImpl implements MessageController {
     }
 
     /**
-     * Handler is logging and returning 400 status code
-     * when JSON is not valid and 400 Bad Request
-     */
-    @ExceptionHandler({HttpMessageNotReadableException.class})
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    public void handleException() {
-        LOGGER.info("Message is not valid JSON");
-    }
-
-    /**
      * Endpoint for sending the message to kafka
      * @param message - every valid JSON
      * @return
@@ -49,7 +37,6 @@ public class MessageControllerImpl implements MessageController {
             LOGGER.info("Publishing message endpoint ended successfully");
             return ResponseEntity.ok(message);
     }
-
 
     /**
      * Endpoint for retrieving all message persisted in the MongoDB

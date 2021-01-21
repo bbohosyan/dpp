@@ -7,3 +7,7 @@ spring:
     consumer:
       group-id: embedded1
       auto-offset-reset: earliest
+
+  data:
+    mongodb:
+      database: messages

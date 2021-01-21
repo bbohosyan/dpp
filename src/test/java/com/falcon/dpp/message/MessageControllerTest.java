@@ -5,6 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import com.falcon.dpp.message.controller.MessageController;
 import com.falcon.dpp.message.model.Message;
+import com.falcon.dpp.message.repository.MessageRepository;
 import com.falcon.dpp.message.service.MessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

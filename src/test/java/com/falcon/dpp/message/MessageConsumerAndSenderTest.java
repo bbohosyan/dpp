@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import com.falcon.dpp.message.repository.MessageRepository;
 import com.falcon.dpp.message.service.MessageConsumer;
 import com.falcon.dpp.message.service.MessageService;
 import org.apache.kafka.clients.consumer.Consumer;

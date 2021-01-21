@@ -1,6 +1,6 @@
 package com.falcon.dpp.message.service;
 
-import com.falcon.dpp.message.MessageRepository;
+import com.falcon.dpp.message.repository.MessageRepository;
 import com.falcon.dpp.message.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

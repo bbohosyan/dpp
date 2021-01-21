@@ -1,4 +1,4 @@
-package com.falcon.dpp.message.message.service;
+package com.falcon.dpp.message.service;
 
 import java.util.List;
 

@@ -1,0 +1,9 @@
+spring:
+  profiles.active: dev
+---
+spring:
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    consumer:
+      group-id: embedded1
+      auto-offset-reset: earliest

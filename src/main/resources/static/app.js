@@ -25,7 +25,6 @@ function connect() {
 }
 
 function disconnect() {
-    console.log("showGreeting")
     if (stompClient !== null) {
         stompClient.disconnect();
     }

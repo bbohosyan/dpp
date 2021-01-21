@@ -1,4 +1,4 @@
-package com.falcon.dpp.message;
+package com.falcon.dpp.message.controller;
 
 import com.falcon.dpp.message.service.MessageService;
 import org.slf4j.Logger;
@@ -13,14 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/messages")
-public class MessageController {
+public class MessageControllerImpl implements MessageController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
     private final MessageService messageService;
 
     @Autowired
-    public MessageController(MessageService messageService) {
+    public MessageControllerImpl(MessageService messageService) {
         this.messageService = messageService;
     }
 
@@ -39,6 +39,7 @@ public class MessageController {
      * @param message - every valid JSON
      * @return
      */
+    @Override
     @GetMapping("/publish")
     public ResponseEntity<Object> publishMessage(@RequestBody final Object message) {
             LOGGER.info("Starting pusblish message endpoint...");
@@ -54,6 +55,7 @@ public class MessageController {
      * Endpoint for retrieving all message persisted in the MongoDB
      * @return
      */
+    @Override
     @GetMapping
     public ResponseEntity<List<String>> getAllMessages(){
 

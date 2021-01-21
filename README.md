@@ -2,7 +2,7 @@
 
 # Falcon.io
 
-Technology stack : Kafka, MongoDB, Docker, Kafka
+Technology stack : Spring Boot, Kafka, MongoDB, Docker, Kafka
 
 # Installations
 

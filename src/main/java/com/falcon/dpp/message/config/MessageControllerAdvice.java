@@ -16,11 +16,11 @@ public class MessageControllerAdvice {
 
     /**
      * Handler is logging and returning 400 status code
-     * when JSON is not valid and 400 Bad Request
+     * when JSON is not valid
      */
     @ExceptionHandler({HttpMessageNotReadableException.class})
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    public void handleException() {
+    public void handleBadRequest() {
         LOGGER.info("Message is not valid JSON");
     }
 }
